@@ -1,7 +1,7 @@
 # Демо по Docker
 
 ## ENTRYPOINT vs CMD
-1. Соберем образ ping, для этого в директории cmd выполним команду `docker build -t cmd .`.
+1. Соберем образ ping, для этого в директории cmd выполним команду `docker build -t cmd .`
 2. Запустим контейнер `docker run cmd`, затем запустим с переопределением команды запуска `docker run cmd ping www.google.com`
 3. Заменим содержимое Dockerfile на \
 `FROM alpine:3.23` \
@@ -13,7 +13,7 @@
 ## Сборка hello-world
 1. Обратим внимание на последовательность команд в Dockerfile
 2. Соберем образ `docker build -t hello-world:1.0 .`, посмотрим размер образа `docker images`
-3. Соберем образ с использованием multi-stage билда `docker build -t hello-world:20 -f multi-stage/Dockerfile .`
+3. Соберем образ с использованием multi-stage билда `docker build -t hello-world:2.0 -f multi-stage/Dockerfile .`
 4. Сравним получившийся размер образа с предыдущей версией `docker images`
 
 ## Запуск Nginx
@@ -31,9 +31,10 @@
    5. `docker stop web-server && docker rm web-server`
 
 ## Ограничение ресурсов
-1. Запустим hello-world с ограничением используемой контейнером памяти `docker run -d -m 256m --name hello-world hello-world:2.0`
-2. Посмотрим потребление ресурсов `docker stats hello-world`, при превышении лимита в 256m контейнер должен завершить свою работу
-3. После завершения работы контейнера посмотрим системный журнал `journalctl -k | grep cgroup`, убедимся, что cgroup остановил процесс
+1. Запустим hello-world `docker run -d --name hello-world hello-world:2.0`, посмотрим, как увеличивается потребление памяти `docker stats hello-world`
+2. Остановим и удалим hello-world `docker stop hello-world && docker rm hello-world`
+3. Запустим hello-world с ограничением используемой контейнером памяти `docker run -d -m 256m --name hello-world hello-world:2.0`
+4. Посмотрим потребление ресурсов `docker stats hello-world`, убедимся, что контейнер использует на более 256 Мб памяти
 
 ## Docker сети
 1. Создадим сеть `docker network create --driver=bridge my-net`
