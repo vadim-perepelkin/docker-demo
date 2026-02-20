@@ -1,0 +1,33 @@
+services:
+  web:
+    image: nginx:latest
+    container_name: web-server
+    ports:
+      - "8000:80"
+    volumes:
+      - ../nginx-html:/usr/share/nginx/html
+    networks:
+      - my-bridge
+
+  app:
+    image: hello-world:2.0
+    container_name: hello-world
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+    networks:
+      - my-bridge
+
+  client:
+    image: alpine/curl
+    depends_on:
+      - web
+    command: curl web-server:80
+    networks:
+      - my-bridge
+
+networks:
+  my-bridge:
+    driver: bridge
+    name: my-bridge
